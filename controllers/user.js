@@ -4,18 +4,19 @@ const Product = require('../models/product');
 
 exports.getUser = async (req, res, next) => {
     const type = req.body.type;
-    const Model = type == 'user' ? User : Admin;
     const id = req.userId;
     try {
-        const user = await Model.findById(id);
-        if (user.cart.number != 0) {
-            let data = await result.populate('cart.items.id');
-            user = data.cart.items.map((i) => { return { product: { ...i.id._doc } } }) //to remove meta-data
-            console.log(user);
+        if (type == 'user') {
+            let user = await User.findById(id).populate('cart.items.id');
+            return res.status(200).json({
+                'data': user
+            })
         }
+        const admin = await Admin.findById(id);
         return res.status(200).json({
-            'data': user
+            'data': admin
         })
+
     } catch (error) {
         return error500(error, 500);
     }
