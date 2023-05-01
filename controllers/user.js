@@ -29,6 +29,7 @@ exports.cart = async (req, res, next) => {
     const prodId = req.body.prodId;
     const task = req.body.task;
 
+
     try {
         let product = await Product.findById(prodId); //get the product
         let user = await User.findById(id);  //get the user
@@ -36,6 +37,11 @@ exports.cart = async (req, res, next) => {
         let cart = user.cart; //make changes to cart
         let total = cart.total;
         let number = cart.number;
+        if (total == 0 && number == 0 && task == 'delete') {
+            return res.status(404).json({
+                'message': 'no product found'
+            })
+        }
 
         cart.total = task == 'add' ? total + product.price : total == 0 ? 0 : total - product.price;
         cart.number = task == 'add' ? number + 1 : number == 0 ? 0 : number - 1;
@@ -64,19 +70,18 @@ exports.cart = async (req, res, next) => {
             user.cart = cart;
             const result = await user.save();
             let data = await result.populate('cart.items.id');
-            data = data.cart.items.map((i) => { return { product: { ...i.id._doc } } }) //to remove meta-data
+            // data = data.cart.items.map((i) => { return { product: { ...i.id._doc } } }) //to remove meta-data
             return res.status(201).json({
                 'data': result
             })
         }
 
         //if product is not there in cart, add the product
-        console.log(cart.items);
         cart.items.push({ 'id': prodId, 'quantity': 1 });
         user.cart = cart;
         let result = await user.save();
         let data = await result.populate('cart.items.id');
-        data.cart.items = data.cart.items.map((i) => { return { product: { ...i.id._doc } } }) //to remove meta-data
+        // data.cart.items = data.cart.items.map((i) => { return { product: { ...i.id._doc } } }) //to remove meta-data
         return res.status(201).json({
             'data': data
         })
