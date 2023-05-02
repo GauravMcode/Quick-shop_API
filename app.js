@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const productRoutes = require('./routes/product');
+const orderRoutes = require('./routes/order');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json()); //parse json body
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(productRoutes);
+app.use(orderRoutes);
 
 //for handling errors
 app.use((error, req, res, next) => {

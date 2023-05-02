@@ -123,6 +123,7 @@ exports.isAuth = async (req, res, next) => {
         return error500(error, 401);
     }
     req.userId = decodedToken.id;  //saving token to request,that can be used by next middlewares
+    req.email = decodedToken.email;  //saving token to request,that can be used by next middlewares
     return next();
 
 }
