@@ -29,11 +29,15 @@ exports.signUp = async (req, res, next) => {
                 email: email,
                 password: hashPassword,
                 cart: cart,
+                addressList: [],
+                imageUrl: 'https://firebasestorage.googleapis.com/v0/b/flutter-shop-f2274.appspot.com/o/profiles%2Fdefault%2Fprofile.png?alt=media&token=532d39ab-45ee-4b8e-93c0-311bedccfc3a',
             }) :
             new Model({
                 name: name,
                 email: email,
                 password: hashPassword,
+                addressList: [],
+                imageUrl: 'https://firebasestorage.googleapis.com/v0/b/flutter-shop-f2274.appspot.com/o/profiles%2Fdefault%2Fprofile.png?alt=media&token=532d39ab-45ee-4b8e-93c0-311bedccfc3a',
             })
         const result = await user.save();
         welocme.sendWelcomeMail(name, email, type);
@@ -101,6 +105,7 @@ exports.signIn = async (req, res, next) => {
 //To check is user is authenticated
 exports.isAuth = async (req, res, next) => {
     const token = req.get('Authorization');
+    const type = req.params.type;
     if (!token) { //if req header doesn't contain jwt
         console.log('error authorize');
         return next(error500('Not Authorized', 401));
@@ -121,6 +126,12 @@ exports.isAuth = async (req, res, next) => {
 
     } catch (error) {
         return error500(error, 401);
+    }
+    const user = type == 'user' ? await User.findById(decodedToken.id) : await Admin.findById(decodedToken.id);
+    if (!user) {
+        console.log('error authorize');
+        return next(error500('Not Authorized', 401));
+
     }
     req.userId = decodedToken.id;  //saving token to request,that can be used by next middlewares
     req.email = decodedToken.email;  //saving token to request,that can be used by next middlewares

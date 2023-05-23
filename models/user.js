@@ -20,6 +20,9 @@ let userSchema = Schema({
         required: false,
 
     },
+    imageUrl: {
+        type: String
+    },
     cart: {
         total: { type: Number },
         number: { type: Number },
@@ -28,7 +31,20 @@ let userSchema = Schema({
             quantity: { type: Number },
         }
         ]
-    }
+    },
+    addressList: [
+        {
+            name: String,
+            mobile: String,
+            line1: String,
+            line2: String,
+            city: String,
+            state: String,
+            country: String,
+        }
+    ],
+    wishList: [{ type: mongoose.Types.ObjectId, ref: 'Product' }],
+    viewedProducts: [{ type: mongoose.Types.ObjectId, ref: 'Product' }]
 
 })
 

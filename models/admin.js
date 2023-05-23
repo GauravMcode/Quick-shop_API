@@ -19,7 +19,13 @@ let userSchema = Schema({
         type: String,
         required: false,
 
-    }
+    },
+    imageUrl: {
+        type: String
+    },
+    addressList: [
+        { type: String }
+    ]
 
 })
 

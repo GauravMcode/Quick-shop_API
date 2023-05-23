@@ -23,6 +23,21 @@ let productSchema = Schema({
         type: Number,
         required: true
     },
+    category: {
+        type: String,
+        required: true
+    },
+    averageRating: {
+        type: Number,
+        required: true
+    },
+    reviews: [
+        {
+            name: { type: String },
+            rating: { type: Number },
+            review: { type: String },
+        }
+    ],
     sales: {
         type: Number,
         required: true

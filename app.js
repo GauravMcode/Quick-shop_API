@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/user');
 const productRoutes = require('./routes/product');
 const orderRoutes = require('./routes/order');
@@ -14,6 +15,7 @@ const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
 app.use(bodyParser.json()); //parse json body
 
 app.use(authRoutes);
+app.use(adminRoutes);
 app.use(userRoutes);
 app.use(productRoutes);
 app.use(orderRoutes);

@@ -1,8 +1,12 @@
-const User = require('../models/user');
-
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
-exports.payment = async (req, res, next) => {
+const User = require('../models/user');
+const Order = require('../models/order');
+const Product = require('../models/product');
+const { generateInvoice } = require('../utils/invoice');
+
+
+exports.paymentReq = async (req, res, next) => {
     let customerId;
     const user = await User.findById(req.userId);
     const amount = user.cart.total * 100;
@@ -20,18 +24,15 @@ exports.payment = async (req, res, next) => {
             });
             customerId = customer.data.id;
         }
-        console.log(customerId);
         const ephemeralKey = await stripe.ephemeralKeys.create(
             { customer: customerId },
             { apiVersion: '2022-11-15' }
         )
-        console.log(ephemeralKey);
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount,
             currency: 'INR',
             customer: customerId,
         })
-        console.log(paymentIntent);
         res.status(200).json({
             paymentIntent: paymentIntent.client_secret,
             ephemeralKey: ephemeralKey.secret,
@@ -45,6 +46,63 @@ exports.payment = async (req, res, next) => {
     }
 }
 
+exports.paymentDone = async (req, res, next) => {
+    const id = req.userId;
+    try {
+        let user = await User.findById(id).populate('cart.items.id');
+        const details = user.cart;
+        //update metrics
+        await details.items.forEach(async (item) => {
+            let product = await Product.findById(item.id['_id']);
+            product.sales = product.sales + item.quantity;
+            console.log(product.sales);
+            await product.save();
+        });
+        // const records = await Product.find({ '_id': { $in: products } });
+        const order = Order({
+            name: req.body.name,
+            mobile: req.body.mobile,
+            email: req.body.email,
+            line1: req.body.line1,
+            line2: req.body.line2,
+            city: req.body.city,
+            state: req.body.state,
+            country: req.body.country,
+            details: details,
+            invoiceLink: "",
+        });
+        user.cart = { 'total': 0, 'number': 0, 'items': [] };
+        await user.save();
+        const savedOrder = await order.save();
+        req.order = savedOrder;
+
+        next();
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+exports.createInvoice = async (req, res, next) => {
+    await generateInvoice(req.order, next);
+}
+
+exports.invoiceLink = async (req, res, next) => {
+    const id = req.order._id
+    const order = await Order.findById(id);
+    const link = order.invoiceLink;
+    console.log(link);
+    res.status(200).json({
+        'invoice': link
+    })
+}
+
+exports.getOrders = async (req, res, next) => {
+    const email = req.email;
+    const orders = await Order.find({ email: email });
+    res.status(200).json({
+        'orders': orders
+    })
+}
 const error500 = (err, status) => {
     const error = new Error();
     error.message = err;

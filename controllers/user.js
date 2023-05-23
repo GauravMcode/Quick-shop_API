@@ -1,13 +1,14 @@
 const User = require('../models/user');
 const Admin = require('../models/admin');
 const Product = require('../models/product');
+const bodyParser = require('body-parser');
 
 exports.getUser = async (req, res, next) => {
-    const type = req.body.type;
+    const type = req.params.type;
     const id = req.userId;
     try {
         if (type == 'user') {
-            let user = await User.findById(id).populate('cart.items.id');
+            let user = await User.findById(id).populate('cart.items.id').populate('wishList');
             return res.status(200).json({
                 'data': user
             })
@@ -21,6 +22,33 @@ exports.getUser = async (req, res, next) => {
         return error500(error, 500);
     }
 
+}
+
+exports.updateUser = async (req, res, next) => {
+    const type = req.params.type;
+    const id = req.userId;
+    const changes = req.body;
+    try {
+        if (type == 'user') {
+            let user = await User.findById(id).populate('cart.items.id');
+            user.name = changes['name'];
+            user.addressList = changes['addressList'];
+            user.imageUrl = changes['imageUrl'];
+            await user.save();
+            return res.status(200).json({
+                'data': user
+            })
+        }
+        let admin = await Admin.findById(id);
+        admin.name = changes['name'];
+        admin.imageUrl = changes['imageUrl']
+        await admin.save();
+        return res.status(200).json({
+            'data': admin
+        })
+    } catch (error) {
+
+    }
 }
 
 //to handle adding and deleting from cart
@@ -68,17 +96,25 @@ exports.cart = async (req, res, next) => {
             }
 
             user.cart = cart;
+            if (user.cart.number == 0) {
+                user.cart.total = 0;
+                user.items = [];
+            }
             const result = await user.save();
             let data = await result.populate('cart.items.id');
             // data = data.cart.items.map((i) => { return { product: { ...i.id._doc } } }) //to remove meta-data
             return res.status(201).json({
-                'data': result
+                'data': data
             })
         }
 
         //if product is not there in cart, add the product
         cart.items.push({ 'id': prodId, 'quantity': 1 });
         user.cart = cart;
+        if (user.cart.number == 0) {
+            user.cart.total = 0;
+            user.items = [];
+        }
         let result = await user.save();
         let data = await result.populate('cart.items.id');
         // data.cart.items = data.cart.items.map((i) => { return { product: { ...i.id._doc } } }) //to remove meta-data
@@ -89,6 +125,32 @@ exports.cart = async (req, res, next) => {
         console.log(e);
         return error500(e, 500);
     }
+}
+
+exports.wishList = async (req, res, next) => {
+    const action = req.params.action;
+    const id = req.userId;
+    const prodId = req.body.prodId;
+    let user = await User.findById(id);
+    console.log(action);
+    //check  if the product already exists in wish-list, if yes and action is delte then remove it
+    user.wishList.forEach(async (e) => {
+        if (e.toString() === prodId && action == 'delete') {
+            user.wishList = user.wishList.filter((e) => {
+                return e.toString() !== prodId;
+            })
+            console.log(user.wishList);
+            await user.save();
+        }
+    })
+
+    //if product already doesn't exist in wishlist and action is add
+    if (!user.wishList.includes(prodId) && action == 'add') {
+        user.wishList.push(prodId);
+        await user.save();
+
+    }
+    return this.getUser(req, res, next);
 }
 
 
