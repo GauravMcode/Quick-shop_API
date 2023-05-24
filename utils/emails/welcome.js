@@ -9,16 +9,16 @@ const transporter = nodemailer.createTransport({
 })
 
 exports.sendWelcomeMail = (name, email, type) => {
-	const logoUrl = 'https://st.depositphotos.com/1005920/1471/i/950/depositphotos_14713611-stock-photo-shopping-cart-icon.jpg';
+	const logoUrl = 'https://firebasestorage.googleapis.com/v0/b/flutter-shop-f2274.appspot.com/o/logo%20.png?alt=media&token=0e0ac96f-2551-43df-9c83-927809332459';
 	transporter.sendMail({
 		to: email,
 		from: process.env.SHOP_EMAIL,
-		subject: 'Welcome to Flutter Shop',
+		subject: 'Welcome to Quickly',
 		html: type == 'user' ? `
         <!DOCTYPE html>
 <html>
 <head>
-	<title>Welcome to Flutter Shop</title>
+	<title>Welcome to Quickly</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -28,14 +28,14 @@ exports.sendWelcomeMail = (name, email, type) => {
 		
 		<!-- Header -->
 		<div style="text-align: center;">
-			<img src=${logoUrl} alt="Flutter Shop Logo" style="max-height: 100px; margin-bottom: 20px;">
-			<h1 style="font-size: 24px; color: #333333; margin: 0;">Welcome to Flutter Shop</h1>
+			<img src=${logoUrl} alt="Quickly Logo" style="max-height: 100px; margin-bottom: 20px;">
+			<h1 style="font-size: 24px; color: #333333; margin: 0;">Welcome to Quickly</h1>
 		</div>
 
 		<!-- Main Content -->
 		<p style="font-size: 16px; color: #333333; margin-top: 30px;">Dear ${name},</p>
 
-		<p style="font-size: 16px; color: #333333; margin-top: 20px;">Thank you for joining Flutter Shop. We're excited to have you as a new customer!</p>
+		<p style="font-size: 16px; color: #333333; margin-top: 20px;">Thank you for joining Quickly. We're excited to have you as a new customer!</p>
 
 		<p style="font-size: 16px; color: #333333; margin-top: 20px;">As a registered user, you'll be able to:</p>
 
@@ -50,7 +50,7 @@ exports.sendWelcomeMail = (name, email, type) => {
 
 		<!-- Footer -->
 		<div style="text-align: center; margin-top: 50px;">
-			<p style="font-size: 14px; color: #888888;">&copy; 2023 Flutter Shop. All rights reserved.</p>
+			<p style="font-size: 14px; color: #888888;">&copy; 2023 Quickly. All rights reserved.</p>
 		</div>
 
 	</div>
@@ -62,7 +62,7 @@ exports.sendWelcomeMail = (name, email, type) => {
         <!DOCTYPE html>
 <html>
 <head>
-	<title>Welcome to Flutter Shop</title>
+	<title>Welcome to Quickly</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -72,14 +72,14 @@ exports.sendWelcomeMail = (name, email, type) => {
 		
 		<!-- Header -->
 		<div style="text-align: center;">
-			<img src=${logoUrl} alt="Flutter Shop Logo" style="max-height: 100px; margin-bottom: 20px;">
-			<h1 style="font-size: 24px; color: #333333; margin: 0;">Welcome to Flutter Shop</h1>
+			<img src=${logoUrl} alt="Quickly Logo" style="max-height: 100px; margin-bottom: 20px;">
+			<h1 style="font-size: 24px; color: #333333; margin: 0;">Welcome to Quickly</h1>
 		</div>
 
 		<!-- Main Content -->
 		<p style="font-size: 16px; color: #333333; margin-top: 30px;">Dear ${name},</p>
 
-		<p style="font-size: 16px; color: #333333; margin-top: 20px;">Thank you for joining Flutter Shop. We're excited to have you as a Seller!</p>
+		<p style="font-size: 16px; color: #333333; margin-top: 20px;">Thank you for joining Quickly. We're excited to have you as a Seller!</p>
 
 		<p style="font-size: 16px; color: #333333; margin-top: 20px;">As a registered user, you'll be able to:</p>
 
@@ -96,7 +96,7 @@ exports.sendWelcomeMail = (name, email, type) => {
 
 		<!-- Footer -->
 		<div style="text-align: center; margin-top: 50px;">
-			<p style="font-size: 14px; color: #888888;">&copy; 2023 Flutter Shop. All rights reserved.</p>
+			<p style="font-size: 14px; color: #888888;">&copy; 2023 Quickly. All rights reserved.</p>
 		</div>
 
 	</div>

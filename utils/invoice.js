@@ -58,9 +58,9 @@ function generateHeader(doc) {
         .image("logo.png", 50, 45, { width: 50 })
         .fillColor("#444444")
         .fontSize(20)
-        .text("Quick Shop", 110, 57)
+        .text("Quickly", 110, 57)
         .fontSize(10)
-        .text("Quick Shop Pvt Ltd.", 200, 50, { align: "right" })
+        .text("Quickly Pvt Ltd.", 200, 50, { align: "right" })
         .text("123 Main Street", 200, 65, { align: "right" })
         .text("New York, NY, 10025", 200, 80, { align: "right" })
         .moveDown();

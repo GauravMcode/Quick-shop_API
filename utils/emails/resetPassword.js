@@ -1,24 +1,24 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.SHOP_EMAIL,
-        pass: process.env.SHOP_EMAIL_PASSWORD
-    }
+	service: 'gmail',
+	auth: {
+		user: process.env.SHOP_EMAIL,
+		pass: process.env.SHOP_EMAIL_PASSWORD
+	}
 })
 
 exports.sendResetEmail = (name, email, otp) => {
-    const logoUrl = 'https://st.depositphotos.com/1005920/1471/i/950/depositphotos_14713611-stock-photo-shopping-cart-icon.jpg';
-    transporter.sendMail({
-        to: email,
-        from: process.env.SHOP_EMAIL,
-        subject: 'Reset Pasword for Flutter-Shop',
-        html: `
+	const logoUrl = 'https://st.depositphotos.com/1005920/1471/i/950/depositphotos_14713611-stock-photo-shopping-cart-icon.jpg';
+	transporter.sendMail({
+		to: email,
+		from: process.env.SHOP_EMAIL,
+		subject: 'Reset Pasword for Flutter-Shop',
+		html: `
         <!DOCTYPE html>
 <html>
 <head>
-	<title>Password Reset for Flutter Shop</title>
+	<title>Password Reset for Quickly</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -28,14 +28,14 @@ exports.sendResetEmail = (name, email, otp) => {
 		
 		<!-- Header -->
 		<div style="text-align: center;">
-			<img src=${logoUrl} alt="Flutter Shop Logo" style="max-height: 100px; margin-bottom: 20px;">
-			<h1 style="font-size: 24px; color: #333333; margin: 0;">Password Reset for Flutter Shop</h1>
+			<img src=${logoUrl} alt="Quickly Logo" style="max-height: 100px; margin-bottom: 20px;">
+			<h1 style="font-size: 24px; color: #333333; margin: 0;">Password Reset for Quickly</h1>
 		</div>
 
 		<!-- Main Content -->
 		<p style="font-size: 16px; color: #333333; margin-top: 30px;">Dear ${name},</p>
 
-		<p style="font-size: 16px; color: #333333; margin-top: 20px;">We received a request to reset your password for your Flutter Shop account. If you did not request a password reset, please ignore this message.</p>
+		<p style="font-size: 16px; color: #333333; margin-top: 20px;">We received a request to reset your password for your Quickly account. If you did not request a password reset, please ignore this message.</p>
 
 		<p style="font-size: 16px; color: #333333; margin-top: 20px;">Please use the following One-Time Password (OTP) to reset your password:</p>
 
@@ -47,7 +47,7 @@ exports.sendResetEmail = (name, email, otp) => {
 
 		<!-- Footer -->
 		<div style="text-align: center; margin-top: 50px;">
-			<p style="font-size: 14px; color: #888888;">&copy; 2023 Flutter Shop. All rights reserved.</p>
+			<p style="font-size: 14px; color: #888888;">&copy; 2023 Quickly. All rights reserved.</p>
 		</div>
 
 	</div>
@@ -56,6 +56,6 @@ exports.sendResetEmail = (name, email, otp) => {
 </html>
 
         `
-    })
+	})
 }
 
