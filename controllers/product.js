@@ -91,13 +91,23 @@ exports.getLimitProducts = async (req, res, next) => {
     const productCount = await Product.countDocuments();
     const count = Math.ceil(productCount / limit);
     try {
+        if (category == 'All') {
+            const products = await Product.find({}, { sales: 0, views: 0 }).skip(page * limit).limit(limit);
+            res.status(200).json({
+                'data': products,
+                'count': count
+            })
+        } else {
+            const products = await Product.find({ category: category }, { sales: 0, views: 0 }).skip(page * limit).limit(limit); //excluding sales and views
+            res.status(200).json({
+                'data': products,
+                'count': products.length
+            })
+        }
         const products = category == 'All' ?
             await Product.find({}, { sales: 0, views: 0 }).skip(page * limit).limit(limit) :
             await Product.find({ category: category }, { sales: 0, views: 0 }).skip(page * limit).limit(limit); //excluding sales and views
-        res.status(200).json({
-            'data': products,
-            'count': count
-        })
+
     } catch (error) {
         console.log(error);
         error500(error, 500);
