@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
 })
 
 exports.sendResetEmail = (name, email, otp) => {
-	const logoUrl = 'https://st.depositphotos.com/1005920/1471/i/950/depositphotos_14713611-stock-photo-shopping-cart-icon.jpg';
+	const logoUrl = 'https://firebasestorage.googleapis.com/v0/b/flutter-shop-f2274.appspot.com/o/logo%20.png?alt=media&token=0e0ac96f-2551-43df-9c83-927809332459';
 	transporter.sendMail({
 		to: email,
 		from: process.env.SHOP_EMAIL,
