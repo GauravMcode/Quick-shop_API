@@ -35,6 +35,9 @@ exports.getMetrics = async (req, res, next) => {
         }
     })
     switch (salesData) {
+        case salesData >= 1000:
+            milestone = "Grand";
+            break;
         case salesData >= 100000:
             milestone = "Pro";
             break;
@@ -43,7 +46,7 @@ exports.getMetrics = async (req, res, next) => {
             break;
 
         default:
-            milestone = "Grand";
+            milestone = "Beginner";
             break;
     }
     return res.json({
